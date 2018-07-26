@@ -29,11 +29,17 @@ public class UserController {
 	@GetMapping("/users/{id}")
 	public User getUser(@PathVariable int id) {
 		System.out.println("id: " + id);
-		return service.findOne(id);
+		User user = service.findOne(id);
+		
+		//Exception for User Not Found
+		if(user == null) {
+			throw new userNotFoundException("id-" + id);
+		}
+		return user;
 	}
 	
 	@PostMapping("/users")
-	public void addUser(@RequestBody User user) {
+	public ResponseEntity<Object> addUser(@RequestBody User user) {
 		User savedUser = service.saveUser(user);
 		
 		URI location = ServletUriComponentsBuilder
@@ -42,6 +48,6 @@ public class UserController {
 							.buildAndExpand(savedUser.getId())
 							.toUri();
 		
-		ResponseEntity.created(location);
+		return ResponseEntity.created(location).build();
 	}
 }
