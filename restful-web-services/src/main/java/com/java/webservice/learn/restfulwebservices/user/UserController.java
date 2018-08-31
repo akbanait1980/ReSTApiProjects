@@ -3,10 +3,14 @@ package com.java.webservice.learn.restfulwebservices.user;
 import java.net.URI;
 import java.util.List;
 
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.*;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.mvc.ControllerLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +35,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/users/{id}")
-	public User getUser(@PathVariable int id) {
+	public Resource<User> getUser(@PathVariable int id) {
 		System.out.println("id: " + id);
 		User user = service.findOne(id);
 		
@@ -39,7 +43,13 @@ public class UserController {
 		if(user == null) {
 			throw new userNotFoundException("id-" + id);
 		}
-		return user;
+		
+		Resource<User> resource = new Resource<User>(user);
+		ControllerLinkBuilder linkTo = linkTo(methodOn(this.getClass()).listAll());
+		resource.add(linkTo.withRel("get-all-users"));
+		
+		return resource;
+		
 	}
 	
 	@PostMapping("/users")

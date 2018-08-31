@@ -32,7 +32,7 @@ public class UserService {
 		return user;
 	}
 	
-	public User findOne(int id) {
+	public User findOne( int id) {
 		for(User user:users) {
 			if(user.getId()==id) {
 				return user;
