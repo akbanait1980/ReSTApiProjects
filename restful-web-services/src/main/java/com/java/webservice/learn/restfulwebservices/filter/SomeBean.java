@@ -1,8 +1,19 @@
 package com.java.webservice.learn.restfulwebservices.filter;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+//@JsonIgnoreProperties(value= {"field1","field3"})
+@JsonFilter("SimpleBeanFilter")
 public class SomeBean {
 	
-	private String field1, field2, field3;
+	private String field1;
+	
+	private String field2;
+	
+//	@JsonIgnore
+	private String field3;
 	
 	public SomeBean(String field1, String field2, String field3) {
 		super();
